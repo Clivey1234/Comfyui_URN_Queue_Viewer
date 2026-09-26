@@ -1,6 +1,6 @@
 # URN Queue Media Viewer
 
-**URN Queue Media Viewer** is a standalone ComfyUI queue visualisation and queue-management extension designed to make queued jobs eaier to maange.
+**URN Queue Media Viewer** is a standalone ComfyUI queue visualisation and queue-management extension designed to make queued jobs easier to maange.
 
 <img width="656" height="1028" alt="image" src="https://github.com/user-attachments/assets/56e5d076-e3d3-48aa-8c68-5ae5af36d1b5" />
 
