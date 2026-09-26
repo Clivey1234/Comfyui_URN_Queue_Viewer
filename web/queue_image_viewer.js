@@ -828,6 +828,13 @@ function createQueueViewer(root, options = {}) {
     headerButtons.style.cssText =
         "display:flex;align-items:center;justify-content:flex-end;gap:5px;flex:0 0 auto;";
 
+    const expandCollapseAllButton = document.createElement("button");
+    expandCollapseAllButton.textContent = "Collapse All";
+    expandCollapseAllButton.type = "button";
+    expandCollapseAllButton.title = "Collapse all queue cards";
+    expandCollapseAllButton.style.cssText =
+        "padding:3px 8px;border-radius:5px;border:1px solid rgba(255,255,255,.22);cursor:pointer;background:rgba(255,255,255,.08);color:inherit;font-weight:600;white-space:nowrap;";
+
     const pauseButton = document.createElement("button");
     pauseButton.textContent = "⏸ Pause Queue";
     pauseButton.type = "button";
@@ -849,7 +856,7 @@ function createQueueViewer(root, options = {}) {
         "padding:3px 8px;border-radius:5px;border:1px solid rgba(255,255,255,.18);cursor:pointer;background:rgba(255,255,255,.07);color:inherit;";
 
     headerLeft.append(status, clearQueueButton);
-    headerButtons.append(pauseButton, refreshButton);
+    headerButtons.append(expandCollapseAllButton, pauseButton, refreshButton);
     header.append(headerLeft, headerButtons);
 
     const body = document.createElement("div");
@@ -867,6 +874,7 @@ function createQueueViewer(root, options = {}) {
     let pauseBusy = false;
     let clearBusy = false;
     let currentPendingCount = 0;
+    let currentQueuePromptIds = [];
     let requestRefresh = () => {};
     const hiddenPromptIds = new Set();
 
@@ -907,6 +915,18 @@ function createQueueViewer(root, options = {}) {
             : "No pending queue items to clear";
     };
 
+    const updateExpandCollapseAllButton = () => {
+        const ids = currentQueuePromptIds.filter(Boolean);
+        const hasCards = ids.length > 0;
+        const allCollapsed = hasCards && ids.every((promptId) => collapsedPromptIds.has(promptId));
+
+        expandCollapseAllButton.disabled = !hasCards;
+        expandCollapseAllButton.textContent = allCollapsed ? "Expand All" : "Collapse All";
+        expandCollapseAllButton.title = allCollapsed ? "Expand all queue cards" : "Collapse all queue cards";
+        expandCollapseAllButton.style.opacity = hasCards ? "1" : ".4";
+        expandCollapseAllButton.style.cursor = hasCards ? "pointer" : "default";
+    };
+
     const renderQueue = (data) => {
         const running = Array.isArray(data?.queue_running) ? data.queue_running : [];
         const pendingRaw = Array.isArray(data?.queue_pending) ? data.queue_pending : [];
@@ -915,11 +935,12 @@ function createQueueViewer(root, options = {}) {
         updateClearQueueButton();
         updateSidebarQueueBadge(running.length, pending.length);
 
-        const currentIds = new Set(
-            [...running, ...pending]
-                .map((entry) => String(getPromptEntry(entry).promptId || ""))
-                .filter(Boolean)
-        );
+        currentQueuePromptIds = [...running, ...pending]
+            .map((entry) => String(getPromptEntry(entry).promptId || ""))
+            .filter(Boolean);
+        updateExpandCollapseAllButton();
+
+        const currentIds = new Set(currentQueuePromptIds);
         for (const promptId of [...hiddenPromptIds]) {
             if (!currentIds.has(promptId)) hiddenPromptIds.delete(promptId);
         }
@@ -1090,6 +1111,22 @@ function createQueueViewer(root, options = {}) {
             updateClearQueueButton();
             await refresh();
         }
+    };
+
+    const toggleAllCards = () => {
+        const ids = currentQueuePromptIds.filter(Boolean);
+        if (!ids.length) return;
+
+        const allCollapsed = ids.every((promptId) => collapsedPromptIds.has(promptId));
+        if (allCollapsed) {
+            for (const promptId of ids) collapsedPromptIds.delete(promptId);
+        } else {
+            for (const promptId of ids) collapsedPromptIds.add(promptId);
+        }
+
+        lastSig = null;
+        updateExpandCollapseAllButton();
+        refresh();
     };
 
     const moveJob = async (promptId, action) => {
@@ -1263,6 +1300,7 @@ function createQueueViewer(root, options = {}) {
                 if (collapsedPromptIds.has(promptId)) collapsedPromptIds.delete(promptId);
                 else collapsedPromptIds.add(promptId);
                 lastSig = null;
+                updateExpandCollapseAllButton();
                 refresh();
             }
             return;
@@ -1282,6 +1320,10 @@ function createQueueViewer(root, options = {}) {
         event.preventDefault();
         event.stopPropagation();
         cancelJob(deleteButton.dataset.promptId || "", deleteButton.dataset.queueState || "pending");
+    });
+
+    expandCollapseAllButton.addEventListener("click", () => {
+        toggleAllCards();
     });
 
     pauseButton.addEventListener("click", () => {
