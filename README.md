@@ -9,6 +9,9 @@ Instead of showing only a list of prompt IDs, it turns each queued workflow into
 
 ---
 
+Tutorial:  https://www.youtube.com/watch?v=u_73zQ_u-sg
+
+
 ## What it does
 
 URN Queue Media Viewer adds a richer view of ComfyUI's running and pending jobs.
