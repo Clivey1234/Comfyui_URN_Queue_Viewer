@@ -2,9 +2,9 @@
 
 **URN Queue Media Viewer** is a standalone ComfyUI queue visualisation and queue-management extension designed to make long, mixed-media queues easier to understand and control.
 
-Instead of showing only a list of prompt IDs, it turns each queued workflow into a visual card containing its media inputs, workflow name, queue position and controls. It lives primarily in its own **URN Queue** sidebar tab, so it remains available regardless of which workflow is currently open.
+<img width="510" height="1182" alt="image" src="https://github.com/user-attachments/assets/0b18c9de-9295-48c0-9a5a-674fa0963292" />
 
-The extension does not depend on VHS or another third-party queue/media package.
+Instead of showing only a list of prompt IDs, it turns each queued workflow into a visual card containing its media inputs, workflow name, queue position and controls. It lives primarily in its own **URN Queue** sidebar tab, so it remains available regardless of which workflow is currently open.
 
 ---
 
