@@ -1,9 +1,8 @@
 # URN Queue Media Viewer
 
-**URN Queue Media Viewer** is a standalone ComfyUI queue visualisation and queue-management extension designed to make long, mixed-media queues easier to understand and control.
+**URN Queue Media Viewer** is a standalone ComfyUI queue visualisation and queue-management extension designed to make queued jobs eaier to maange.
 
 <img width="656" height="1028" alt="image" src="https://github.com/user-attachments/assets/56e5d076-e3d3-48aa-8c68-5ae5af36d1b5" />
-
 
 
 Instead of showing only a list of prompt IDs, it turns each queued workflow into a visual card containing its media inputs, workflow name, queue position and controls. It lives primarily in its own **URN Queue** sidebar tab, so it remains available regardless of which workflow is currently open.
@@ -45,33 +44,8 @@ All four assets remain attached to the same queue card.
 
 The main preview is used for image display or audio/video playback. Audio and video files in the lower asset list are deliberately kept compact so the interface does not duplicate media players.
 
----
-
-## Supported media
-
-The viewer recognises direct queued references to common media formats.
-
-| Media | Formats |
-| --- | --- |
-| Images | PNG, JPG, JPEG, WEBP, BMP, GIF, TIFF |
-| Video | MP4, M4V, MOV, MKV, WEBM, AVI, WMV, MPG, MPEG, M2TS |
-| Audio | MP3, FLAC, WAV, M4A, AAC, OGG, OPUS, WMA |
-
 Media is detected from the queued prompt itself rather than from specific third-party loader node names.
 
-This allows the viewer to remain independent of VHS and other custom media packs.
-
----
-
-## Media deduplication
-
-Some workflows pass the original media filename through several downstream nodes as metadata, provenance or filename hints.
-
-URN Queue Media Viewer detects this and prevents the same physical file from appearing several times in one queue card.
-
-Repeated references are deduplicated using the media type, ComfyUI storage location and normalised file path.
-
-Metadata-style fields such as filename hints are ignored as additional media sources.
 
 ---
 
