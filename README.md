@@ -260,36 +260,6 @@ The JavaScript frontend handles the sidebar interface, media detection, previews
 
 ---
 
-## Current baseline
-
-Current accepted build:
-
-```text
-URN_Queue_Image_Viewer_V6_9_Goto_Workflow.zip
-```
-
-This baseline includes:
-
-- ComfyUI sidebar integration
-- image, video and audio queue previews
-- mixed-media workflow cards
-- media deduplication
-- workflow-name tracking
-- Goto Workflow
-- real queue reordering
-- Delete / Cancel
-- Pause / Resume
-- Clear Queue
-- running progress display
-- collapse / expand
-- active-job sidebar badge
-- text/non-media fallback preview
-- compact audio/video asset rows
-- red queue separators
-- legacy node compatibility
-
----
-
 ## Purpose
 
 The project is intended to answer one simple question:
